@@ -13,12 +13,22 @@ task("listauction", "List item on auction")
   process.env.CONTRACT_ACCAUNT!, accounts[args.user]);
 
   if (args.amount == 0){
+    const my721Contract = await hre.ethers.getContractAt("My721Contract",
+                              process.env.ERC721_CONTRACT!,
+                              accounts[args.user]);
+    await my721Contract.approve(process.env.CONTRACT_ACCAUNT!, args.tokenid);
+
     const tx = await contract["listItemOnAuction(uint256,uint256)"]
     (args.tokenid, args.minprice);
     tx.wait();
     console.log(tx);
   }
   else {
+    const my1155Contract = await hre.ethers.getContractAt("My1155Contract",
+                              process.env.ERC1155_CONTRACT!,
+                              accounts[args.user]);
+    await my1155Contract.setApprovalForAll(process.env.CONTRACT_ACCAUNT!, true);
+    
     const tx = await contract["listItemOnAuction(uint256,uint256,uint256)"]
     (args.tokenid, args.amount, args.minprice);
     tx.wait();
