@@ -31,7 +31,7 @@ task("listsale", "List item on sale")
     const my1155Contract = await hre.ethers.getContractAt("My1155Contract",
                               process.env.ERC1155_CONTRACT!,
                               accounts[args.user]);
-    await my1155Contract.approve(process.env.CONTRACT_ACCAUNT!, args.tokenid);
+    await my1155Contract.setApprovalForAll(process.env.CONTRACT_ACCAUNT!, true);
 
     const tx = await contract["listItem(uint256,uint256,uint256)"](args.tokenid, args.amount, args.price);
     const txx = await tx.wait();

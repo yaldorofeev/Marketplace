@@ -32,8 +32,8 @@ task("buy", "Buy item")
     );
   }
   else {
-    await stContract.approve(process.env.CONTRACT_ACCAUNT!, price);
-    const tx = await contract["buyItem(uint256,uint256)"](args.tradeid, args.amount * price);
+    await stContract.approve(process.env.CONTRACT_ACCAUNT!, price * args.amount);
+    const tx = await contract["buyItem(uint256,uint256)"](args.tradeid, args.amount);
     const txx = await tx.wait();
     console.log(
       {
