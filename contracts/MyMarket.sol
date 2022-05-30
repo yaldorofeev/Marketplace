@@ -47,18 +47,19 @@ contract MyMarket {
   // Mapping from ID to cheking kind of token
   mapping(uint256 => bool) is1155Token;
 
+  /* *
+   * @dev Emitted when token(s) wiht `id` and with 'amount' created for 'owner'.
+   */
   event Created (
     address indexed owner,
     uint256 id,
     uint256 amount
   );
 
-  event CreatedCollection (
-    address indexed owner,
-    uint256 id,
-    uint256 amount
-  );
-
+  /* *
+   * @dev Emitted when token(s) wiht `tokenId` and with 'amount' listed
+   * on sale with 'tradeId' and 'price'.
+   */
   event ListedOnSale (
     uint256 tradeId,
     uint256 tokenId,
@@ -66,6 +67,10 @@ contract MyMarket {
     uint256 amount
   );
 
+  /* *
+   * @dev Emitted when token(s) wiht `tokenId` and with 'amount' listed
+   * on auction with 'tradeId' and 'minPrice'.
+   */
   event ListedOnAuction (
     uint256 tradeId,
     uint256 tokenId,
@@ -73,6 +78,10 @@ contract MyMarket {
     uint256 amount
   );
 
+  /* *
+   * @dev Emitted when 'bidder' make bid 'newPrice' in auction with 'tradeId'
+   * on token(s) wiht `tokenId`.
+   */
   event bidMade (
     uint256 tradeId,
     uint256 tokenId,
@@ -80,6 +89,10 @@ contract MyMarket {
     address bidder
   );
 
+  /* *
+   * @dev Emitted when token(s) wiht `tokenId` and with 'amount' was sold
+   * by 'buyer'.
+   */
   event Sold (
     uint256 id,
     uint256 amount,
@@ -117,8 +130,8 @@ contract MyMarket {
   }
 
   /**
-   * @dev Everyone can vote, but only once.
-   * @param _tokenURI ID of the vote
+   * @dev Mint token ERC721.
+   * @param _tokenURI URI of token.
    */
   function createItem(string memory _tokenURI) public {
     _tokenIds.increment();
@@ -129,9 +142,9 @@ contract MyMarket {
   }
 
   /**
-   * @dev  Everyone can vote, but only once.
-   * @param _tokenURI ID of the vote
-   * @param _amount addresses of candidates of the vote
+   * @dev  Mint tokens ERC1155
+   * @param _tokenURI  URI of tokens
+   * @param _amount amount of tokens
    */
   function createItem(string memory _tokenURI, uint256 _amount) public {
     _tokenIds.increment();
@@ -143,9 +156,9 @@ contract MyMarket {
   }
 
   /**
-   * @dev Function for erc721 list.
-   * @param _tokenId of the vote
-   * @param _price addresses of candidates of the vote
+   * @dev Function for ERC721 list on sale
+   * @param _tokenId of token
+   * @param _price of token
    */
   function listItem(uint256 _tokenId, uint256 _price) public  {
     require(_tokenId <= _tokenIds.current(), "Invalid token ID");
@@ -170,10 +183,10 @@ contract MyMarket {
   }
 
   /**
-   * @dev Function for erc1155 list.
-   * @param _tokenId ID of the vote
-   * @param _amount addresses of candidates of the vote
-   * @param _price addresses of candidates of the vote
+   * @dev Function for ERC1155 list on sale
+   * @param _tokenId of token
+   * @param _amount of token
+   * @param _price of token
    */
   function listItem(uint256 _tokenId, uint256 _amount, uint256 _price) public {
     require(_tokenId <= _tokenIds.current(), "Invalid token ID");
@@ -198,8 +211,8 @@ contract MyMarket {
   }
 
   /**
-   * @dev Function for erc721 sale.
-   * @param _tradeId ID of the vote
+   * @dev Function for buying ERC721
+   * @param _tradeId of sale
    */
   function buyItem(uint256 _tradeId) public {
     TokenOnTrade storage tk = onTrade[_tradeId];
@@ -217,9 +230,9 @@ contract MyMarket {
   }
 
   /**
-   * @dev Function for erc1155 sale.
-   * @param _tradeId ID of the vote
-   * @param _amount addresses of candidates of the vote
+   * @dev Function for buying ERC1155
+   * @param _tradeId of sale
+   * @param _amount of tokens
    */
   function buyItem(uint256 _tradeId, uint256 _amount) public {
     require(_amount != 0, "The amount can not be zero");
@@ -240,8 +253,8 @@ contract MyMarket {
   }
 
   /**
-   * @dev Function for erc1155 sale.
-   * @param _tradeId ID of the vote
+   * @dev Function cancel sale
+   * @param _tradeId of sale
    */
   function cancel(uint256 _tradeId) public {
     TokenOnTrade storage tk = onTrade[_tradeId];
@@ -257,9 +270,9 @@ contract MyMarket {
   }
 
   /**
-   * @dev Vote. Everyone can vote, but only once.
-   * @param _tokenId ID of the vote
-   * @param _minPrice addresses of candidates of the vote
+   * @dev Function for ERC721 list on auction
+   * @param _tokenId of token
+   * @param _minPrice start price
    */
   function listItemOnAuction(uint256 _tokenId, uint256 _minPrice) public {
     require(_tokenId <= _tokenIds.current(), "Invalid token ID");
@@ -284,10 +297,10 @@ contract MyMarket {
   }
 
   /**
-   * @dev Vote. Everyone can vote, but only once.
-   * @param _tokenId ID of the vote
-   * @param _amount onAuction:addresses of candidates of the vote
-   * @param _minPrice onAuction:addresses of candidates of the vote
+   * @dev Function for ERC1155 list on auction
+   * @param _tokenId of tokens
+   * @param _amount of tokens
+   * @param _minPrice start price
    */
   function listItemOnAuction(uint256 _tokenId, uint256 _amount, uint256 _minPrice) public {
     require(_tokenId <= _tokenIds.current(), "Invalid token ID");
@@ -312,9 +325,9 @@ contract MyMarket {
   }
 
   /**
-   * @dev Vote. Everyone can vote, but only once.
-   * @param _tradeId ID of the vote
-   * @param _bid addresses of candidates of the vote
+   * @dev Function for bid making
+   * @param _tradeId of auction
+   * @param _bid that make should be greater or equal than minPrice plus bid step
    */
   function makeBid(uint256 _tradeId, uint256 _bid) public {
     TokenOnTrade storage tk = onTrade[_tradeId];
@@ -335,8 +348,8 @@ contract MyMarket {
   }
 
   /**
-   * @dev Vote. Everyone can vote, but only once.
-   * @param _tradeId ID of the vote
+   * @dev Finish auction
+   * @param _tradeId of auction
    */
   function finishAuction(uint256 _tradeId) public {
     TokenOnTrade storage tk = onTrade[_tradeId];
