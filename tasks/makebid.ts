@@ -11,6 +11,14 @@ task("makebid", "Make bid on auction")
   const contract = await hre.ethers.getContractAt("MyMarket",
   process.env.CONTRACT_ACCAUNT!, accounts[args.user]);
 
+
+
+  const stContract = await hre.ethers.getContractAt("IERC20_MY",
+                            process.env.SUPER_TOKEN_CONTRACT!,
+                            accounts[args.user]);
+
+  await stContract.approve(process.env.CONTRACT_ACCAUNT!, args.bid);
+
   const tx = await contract.makeBid(args.tradeid, args.bid);
   tx.wait();
   console.log(tx);

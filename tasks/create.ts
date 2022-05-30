@@ -11,30 +11,15 @@ task("create", "Create NFT")
   const contract = await hre.ethers.getContractAt("MyMarket",
   process.env.CONTRACT_ACCAUNT!, accounts[args.user]);
 
-
   if (args.amount == 1){
     const tx = await contract["createItem(string)"](args.tokenuri);
-    tx.wait();
-    contract.on("Created", (owner, id, amount, event) => {
-      console.log({
-        owner: owner,
-        id: id,
-        amount: amount.toNumber(),
-        data: event
-      });
-    });
+    const txx = await tx.wait();
+    console.log({id: txx.events[2].args["id"].toNumber()});
   }
   else {
     const tx = await contract["createItem(string,uint256)"](args.tokenuri, args.amount);
-    tx.wait();
-    contract.on("Created", (owner, id, amount, event) => {
-      console.log({
-        owner: owner,
-        id: id,
-        amount: amount.toNumber(),
-        data: event
-      });
-    });
+    const txx = await tx.wait();
+    console.log({id: txx.events[2].args["id"].toNumber()});
   }
 
 });
